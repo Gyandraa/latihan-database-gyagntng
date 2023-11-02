@@ -7,7 +7,7 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false}))
 
-app.get('/ambil', (req, res) => {
+app.get('/kelas', (req, res) => {
     const querySql = "select * from kelas";
 
     // jalankan query
@@ -23,7 +23,23 @@ app.get('/ambil', (req, res) => {
     
 })
 
-app.post('/simpan', (req, res) => {
+app.get('/siswa', (req, res) => {
+    const querySql = "select * from siswa";
+
+    // jalankan query
+    koneksi.query(querySql, (err, rows, field) => {
+        // error handling
+        if (err) {
+            return res.status(500).json({ message: 'Gagal menampilkan data!', error: err });
+        }
+
+        // jika request berhasil
+        res.status(201).json({ success: true, message: rows });
+    });
+    
+})
+
+app.post('/kelas', (req, res) => {
     let kode = req.body.kode;
     let nama = req.body.nama
     const querySql = "insert into kelas (kode_kelas, nama_kelas) values ('"+kode+"','"+nama+"')";
@@ -41,7 +57,7 @@ app.post('/simpan', (req, res) => {
     
   })
 
-  app.post('/simpan_siswa', (req, res) => {
+  app.post('/siswa', (req, res) => {
     let nis = req.body.nis;
     let nama = req.body.nama
     const querySql = "insert into siswa (nis, nama) values ('"+nis+"','"+nama+"')";
@@ -59,7 +75,7 @@ app.post('/simpan', (req, res) => {
     
   })
 
-  app.delete('/delete/:kode', (req, res) => {
+  app.delete('/kelas/:kode', (req, res) => {
     let kode = req.params.kode;
     const querySql = "delete from kelas where kode_kelas = '"+kode+"'";
 
@@ -115,7 +131,7 @@ app.put('/kelas', (req, res) => {
     
 })
 
-app.delete('/delete_siswa/:nis', (req, res) => {
+app.delete('/siswa/:nis', (req, res) => {
     let nis = req.body.nis
     const querySql = "delete from siswa where nis  = '"+nis+"'";
 
@@ -132,7 +148,7 @@ app.delete('/delete_siswa/:nis', (req, res) => {
     
 })
 
-app.delete('/delete_kelas/:kode', (req, res) => {
+app.delete('/kelas/:kode', (req, res) => {
     let kode = req.body.kode
     const querySql = "delete from kelas where kode_kelas  = '"+kode+"'";
 
